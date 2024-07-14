@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.developer.domain.Article;
 import com.example.developer.dto.AddArticleRequest;
 import com.example.developer.dto.ArticleResponse;
+import com.example.developer.dto.UpdateArticleRequest;
 import com.example.developer.service.BlogService;
 
 import lombok.RequiredArgsConstructor;
@@ -64,5 +66,17 @@ public class BlogApiController {
         blogService.delete(id);
 
         return ResponseEntity.ok().build();
+    }
+
+
+    // 이야 여긴다시 Article이네.. ㅋㅋㅋ
+    @PutMapping("/api/articles/{id}")
+    public ResponseEntity<Article> updateArticle(
+        @PathVariable long id, @RequestBody UpdateArticleRequest request){
+
+        // 트랜잭션을 이용한 업데이트, 정말 중요한 개념이니 숙지해놓자
+        Article updatedArticle = blogService.update(id, request);
+
+        return ResponseEntity.ok().body(updatedArticle);
     }
 }

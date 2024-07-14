@@ -3,9 +3,11 @@ package com.example.developer.service;
 import java.util.*;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.developer.domain.Article;
 import com.example.developer.dto.AddArticleRequest;
+import com.example.developer.dto.UpdateArticleRequest;
 import com.example.developer.repository.BlogRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -39,4 +41,20 @@ public class BlogService {
         // 5번의 강의중 이곳만 처음으로 deleteById를 쓰네;
         blogRepository.deleteById(id);
     }
+
+
+    @Transactional
+    public Article update(long id, UpdateArticleRequest request) {
+
+        Article article = blogRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found: " + id));
+
+        // 이 책의 꽃, 이 책만 수정을 이런식으로 하는데, 이게 작동된다
+        // Transactional이 적용된 메서드 내에서 엔티티의 필드를 변경하면
+        // 커밋될때 변경사항이 적용된다
+        // 이것이 바로 Transactional!!!
+        article.update(request.getTitle(), request.getContent());
+
+        return article;
+    }
+
 }

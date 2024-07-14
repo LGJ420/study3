@@ -25,4 +25,11 @@ public class Article {
         this.title = title;
         this.content = content;
     }
+
+    // 이책 업데이트가 엔티티에 있음 또라이임, 심지어 위에 코드랑 똑같은거 무엇..
+    public void update(String title, String content){
+
+        this.title = title;
+        this.content = content;
+    }
 }
