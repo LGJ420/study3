@@ -5,6 +5,7 @@ import java.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,5 +43,15 @@ public class BlogApiController {
             .toList();
 
         return ResponseEntity.ok().body(articles);
+    }
+
+
+    // 이책은 그리고 왜 long을 래퍼클래스로 안함..? ㅡㅡ;;
+    @GetMapping("/api/articles/{id}")
+    public ResponseEntity<ArticleResponse> findArticle(@PathVariable long id){
+
+        Article article = blogService.findById(id);
+
+        return ResponseEntity.ok().body(new ArticleResponse(article));
     }
 }
