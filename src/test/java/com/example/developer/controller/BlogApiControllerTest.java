@@ -2,7 +2,9 @@ package com.example.developer.controller;
 
 import java.util.*;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,6 +48,7 @@ public class BlogApiControllerTest {
         blogRepository.deleteAll();
     }
 
+
     @DisplayName("addArticle: 블로그 글 추가에 성공한다.")
     @Test
     public void Test1() throws Exception{
@@ -70,5 +73,26 @@ public class BlogApiControllerTest {
         assertThat(articles.size()).isEqualTo(1);
         assertThat(articles.get(0).getTitle()).isEqualTo(title);
         assertThat(articles.get(0).getContent()).isEqualTo(content);
+    }
+
+
+    @DisplayName("findAllArticles: 블로그 글 목록 조회에 성공한다.")
+    @Test
+    public void findAllArticles() throws Exception {
+
+        String url = "/api/articles";
+        String title = "title";
+        String content = "content";
+
+        blogRepository.save(Article.builder()
+            .title(title)
+            .content(content)
+            .build());
+
+        ResultActions resultActions = mockMvc.perform(get(url).accept(MediaType.APPLICATION_JSON));
+
+        resultActions.andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].content").value(content))
+            .andExpect(jsonPath("$[0].title").value(title));
     }
 }

@@ -1,5 +1,7 @@
 package com.example.developer.service;
 
+import java.util.*;
+
 import org.springframework.stereotype.Service;
 
 import com.example.developer.domain.Article;
@@ -17,5 +19,11 @@ public class BlogService {
     public Article save(AddArticleRequest request){
 
         return blogRepository.save(request.toEntity());
+    }
+
+    
+    public List<Article> findAll(){
+
+        return blogRepository.findAll();
     }
 }
