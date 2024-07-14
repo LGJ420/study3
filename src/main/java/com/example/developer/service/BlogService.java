@@ -32,4 +32,11 @@ public class BlogService {
 
         return blogRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found: " + id));
     }
+
+
+    public void delete(long id){
+
+        // 5번의 강의중 이곳만 처음으로 deleteById를 쓰네;
+        blogRepository.deleteById(id);
+    }
 }
