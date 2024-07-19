@@ -1,5 +1,6 @@
 package com.example.developer.controller;
 
+import java.security.Principal;
 import java.util.*;
 
 import org.springframework.http.HttpStatus;
@@ -28,9 +29,10 @@ public class BlogApiController {
 
     @PostMapping("/api/articles")
     public ResponseEntity<Article> addArticle(
-        @RequestBody AddArticleRequest request){
+        @RequestBody AddArticleRequest request,
+        Principal principal){
         
-        Article savedArticle = blogService.save(request);
+        Article savedArticle = blogService.save(request, principal.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
     }

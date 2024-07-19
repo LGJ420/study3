@@ -2,6 +2,7 @@ package com.example.developer.service;
 
 import java.util.*;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +19,9 @@ public class BlogService {
     
     private final BlogRepository blogRepository;
 
-    public Article save(AddArticleRequest request){
+    public Article save(AddArticleRequest request, String userName){
 
-        return blogRepository.save(request.toEntity());
+        return blogRepository.save(request.toEntity(userName));
     }
 
     
@@ -38,7 +39,10 @@ public class BlogService {
 
     public void delete(long id){
 
+        Article article = blogRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found : " + id));
+
         // 5번의 강의중 이곳만 처음으로 deleteById를 쓰네;
+        authorizeArticleAuthor(article);
         blogRepository.deleteById(id);
     }
 
@@ -52,9 +56,21 @@ public class BlogService {
         // Transactional이 적용된 메서드 내에서 엔티티의 필드를 변경하면
         // 커밋될때 변경사항이 적용된다
         // 이것이 바로 Transactional!!!
+        authorizeArticleAuthor(article);
         article.update(request.getTitle(), request.getContent());
 
         return article;
+    }
+
+
+    private static void authorizeArticleAuthor(Article article){
+
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(!article.getAuthor().equals(userName)){
+
+            throw new IllegalArgumentException("not authorized");
+        }
     }
 
 }
