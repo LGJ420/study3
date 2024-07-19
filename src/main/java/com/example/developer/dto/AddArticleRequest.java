@@ -2,6 +2,8 @@ package com.example.developer.dto;
 
 import com.example.developer.domain.Article;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @NoArgsConstructor
@@ -9,7 +11,11 @@ import lombok.*;
 @Getter
 public class AddArticleRequest {
     
+    @NotNull
+    @Size(min = 1, max = 10)
     private String title;
+
+    @NotNull
     private String content;
 
     public Article toEntity(String author){
