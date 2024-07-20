@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.developer.config.error.exception.ArticleNotFoundException;
 import com.example.developer.domain.Article;
 import com.example.developer.dto.AddArticleRequest;
 import com.example.developer.dto.UpdateArticleRequest;
@@ -33,7 +34,7 @@ public class BlogService {
 
     public Article findById(long id){
 
-        return blogRepository.findById(id).orElseThrow(()->new IllegalArgumentException("not found: " + id));
+        return blogRepository.findById(id).orElseThrow(ArticleNotFoundException::new);
     }
 
 
