@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.developer.domain.Article;
+import com.example.developer.domain.Comment;
 import com.example.developer.dto.AddArticleRequest;
+import com.example.developer.dto.AddCommentRequest;
+import com.example.developer.dto.AddCommentResponse;
 import com.example.developer.dto.ArticleResponse;
 import com.example.developer.dto.UpdateArticleRequest;
 import com.example.developer.service.BlogService;
@@ -81,5 +84,17 @@ public class BlogApiController {
         Article updatedArticle = blogService.update(id, request);
 
         return ResponseEntity.ok().body(updatedArticle);
+    }
+
+
+    @PostMapping("/api/comments")
+    public ResponseEntity<AddCommentResponse> addComment(
+        @RequestBody AddCommentRequest request,
+        Principal principal){
+
+        Comment savedComment = blogService.addComment(request, principal.getName());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(new AddCommentResponse(savedComment));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.developer.domain;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -36,6 +37,9 @@ public class Article {
 
     @Column(name = "author", nullable = false)
     private String author;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     @Builder
     public Article(String author, String title, String content){

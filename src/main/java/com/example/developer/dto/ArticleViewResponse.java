@@ -1,8 +1,10 @@
 package com.example.developer.dto;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 import com.example.developer.domain.Article;
+import com.example.developer.domain.Comment;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ public class ArticleViewResponse {
     private String content;
     private LocalDateTime createdAt;
     private String author;
+    private List<Comment> comments;
 
     public ArticleViewResponse(Article article){
         
@@ -24,5 +27,6 @@ public class ArticleViewResponse {
         this.content = article.getContent();
         this.createdAt = article.getCreatedAt();
         this.author = article.getAuthor();
+        this.comments = article.getComments();
     }
 }

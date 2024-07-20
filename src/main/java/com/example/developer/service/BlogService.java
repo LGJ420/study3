@@ -8,9 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.developer.config.error.exception.ArticleNotFoundException;
 import com.example.developer.domain.Article;
+import com.example.developer.domain.Comment;
 import com.example.developer.dto.AddArticleRequest;
+import com.example.developer.dto.AddCommentRequest;
 import com.example.developer.dto.UpdateArticleRequest;
 import com.example.developer.repository.BlogRepository;
+import com.example.developer.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class BlogService {
     
     private final BlogRepository blogRepository;
+    private final CommentRepository commentRepository;
 
     public Article save(AddArticleRequest request, String userName){
 
@@ -72,6 +76,14 @@ public class BlogService {
 
             throw new IllegalArgumentException("not authorized");
         }
+    }
+
+    public Comment addComment(AddCommentRequest request, String userName){
+        
+        Article article = blogRepository.findById(request.getArticleId())
+            .orElseThrow(()->new IllegalArgumentException("not found : " + request.getArticleId()));
+
+        return commentRepository.save(request.toEntity(userName, article));
     }
 
 }
